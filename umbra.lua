@@ -14,26 +14,28 @@ function Umbra.Create()
         ScreenGui.Parent = game.CoreGui or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
         Window.Size = UDim2.new(0, 600, 0, 400)
-        Window.BackgroundColor3 = Color3.fromRGB(11, 15, 15)
         Window.Position = UDim2.new(0.5, -300, 0.5, -200)
-        Window.Parent = ScreenGui
+        Window.BackgroundColor3 = Color3.fromRGB(11, 15, 15)
         Window.Active = true
+        Window.Parent = ScreenGui
 
         Corner.CornerRadius = UDim.new(0, 12)
         Corner.Parent = Window
 
         Border.Color3 = config.BorderColor or Color3.fromRGB(255, 0, 0)
+        Border.Thickness = 2
+        Border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         Border.Parent = Window
 
-        TopBar.Size = UDim2.new(1, 0, 0, 30)
+        TopBar.Size = UDim2.new(1, 0, 0, 40)
         TopBar.BackgroundTransparency = 1
         TopBar.Parent = Window
 
         Image.Parent = TopBar
-        Image.Position = UDim2.new(0, 20, 0, 0)
-        Image.Size = UDim2.new(0, 24, 0, 24)
-        Image.Image = "rbxassetid://" .. tostring(config.LogoId)
+        Image.Size = UDim2.new(0, 60, 0, 60)
+        Image.Position = UDim2.new(0, 10, 0, -10)
         Image.BackgroundTransparency = 1
+        Image.Image = "rbxassetid://" .. tostring(config.LogoId)
 
         local dragging = false
         local dragInput, dragStart, startPos
