@@ -9,12 +9,15 @@ function Umbra.Create()
         local Image = Instance.new("ImageLabel")
         local Border = Instance.new("UIStroke")
         local Corner = Instance.new("UICorner")
+        local TopBar = Instance.new("Frame")
+
+        ScreenGui.Parent = game.CoreGui or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
         Window.Size = UDim2.new(0, 600, 0, 400)
         Window.BackgroundColor3 = Color3.fromRGB(11, 15, 15)
-        Window.Parent = game.CoreGui or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+        Window.Position = UDim2.new(0.5, -300, 0.5, -200)
+        Window.Parent = ScreenGui
         Window.Active = true
-        Window.Draggable = true
 
         Corner.CornerRadius = UDim.new(0, 12)
         Corner.Parent = Window
@@ -22,12 +25,47 @@ function Umbra.Create()
         Border.Color3 = config.BorderColor or Color3.fromRGB(255, 0, 0)
         Border.Parent = Window
 
-        local TopBar = Instance.new("Frame")
+        TopBar.Size = UDim2.new(1, 0, 0, 30)
+        TopBar.BackgroundTransparency = 1
         TopBar.Parent = Window
 
         Image.Parent = TopBar
-        Image.Position = UDim2.new(0, 20, 0.128, 0)
+        Image.Position = UDim2.new(0, 20, 0, 0)
+        Image.Size = UDim2.new(0, 24, 0, 24)
         Image.Image = "rbxassetid://" .. tostring(config.LogoId)
+        Image.BackgroundTransparency = 1
+
+        local dragging = false
+        local dragInput, dragStart, startPos
+        local UIS = game:GetService("UserInputService")
+
+        TopBar.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = true
+                dragStart = input.Position
+                startPos = Window.Position
+
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
+                    end
+                end)
+            end
+        end)
+
+        TopBar.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement then
+                dragInput = input
+            end
+        end)
+
+        UIS.InputChanged:Connect(function(input)
+            if input == dragInput and dragging then
+                local delta = input.Position - dragStart
+                Window.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                                            startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+        end)
 
         return Window
     end
